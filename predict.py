@@ -52,6 +52,27 @@ def dataset_preparation(data):
 
     return predictors, label, max_sequence_len, total_words, vocab
 
+def get_vocab(data):
+    # basic cleanup
+    corpus = data.lower().split("#")
+
+    # tokenization
+    tokenizer.fit_on_texts(corpus)
+    vocab = tokenizer.word_index
+    total_words = len(tokenizer.word_index) + 1
+
+    # create input sequences using list of tokens
+    input_sequences = []
+    for line in corpus:
+        token_list = tokenizer.texts_to_sequences([line])[0]
+        for i in range(1, len(token_list)):
+            n_gram_sequence = token_list[:i + 1]
+            input_sequences.append(n_gram_sequence)
+
+    # pad sequences
+    max_sequence_len = max([len(x) for x in input_sequences])
+
+    return max_sequence_len, total_words, vocab
 
 def generate_text(seed_text, next_words, max_sequence_len):
     for _ in range(next_words):
@@ -85,7 +106,7 @@ def score_sentence(sentence, maxlen, vocab):
 
 data = open('data.txt').read()
 
-predictors, label, max_sequence_len, total_words, vocab = dataset_preparation(data)
+max_sequence_len, total_words, vocab = get_vocab(data)
 model = load_model('test.h5')
 # print(generate_text("em của", 3, max_sequence_len))
 
