@@ -55,9 +55,9 @@ def create_model(predictors, label, max_sequence_len, total_words):
     model.fit(predictors, label, epochs=15, batch_size=256, verbose=1, callbacks=[earlystop])
     print(model.summary())
     # save the model to file
-    model.save('test_sparse.h5')
+    model.save('test_sparse_v2.h5')
     # save the tokenizer
-    dump(tokenizer, open('test_sparse.pkl', 'wb'))
+    dump(tokenizer, open('test_sparse_v2.pkl', 'wb'))
     return model
 
 
@@ -76,7 +76,7 @@ def generate_text(seed_text, next_words, max_sequence_len):
     return seed_text
 
 
-data = open('data.txt').read()
+data = open('data_5k.txt').read()
 # data = conv_special_syll(data)
 
 predictors, label, max_sequence_len, total_words = dataset_preparation(data)

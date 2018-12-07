@@ -10,7 +10,7 @@ from pickle import dump
 from pickle import load
 from keras.models import load_model
 # load the tokenizer
-tokenizer = load(open('test.pkl', 'rb'))
+tokenizer = load(open('test_sparse.pkl', 'rb'))
 vacab = []
 def prepare_sentence(seq, maxlen):
     # Pads seq and slides windows
@@ -48,7 +48,7 @@ def dataset_preparation(data):
 
     # create predictors and label
     predictors, label = input_sequences[:, :-1], input_sequences[:, -1]
-    label = ku.to_categorical(label, num_classes=total_words)
+    # label = ku.to_categorical(label, num_classes=total_words)
 
     return predictors, label, max_sequence_len, total_words, vocab
 
@@ -107,10 +107,10 @@ def score_sentence(sentence, maxlen, vocab):
 data = open('data.txt').read()
 
 max_sequence_len, total_words, vocab = get_vocab(data)
-model = load_model('test.h5')
+model = load_model('test_sparse.h5')
 # print(generate_text("em của", 3, max_sequence_len))
 
-sc1 = score_sentence("một trong số các khuyết điểm của tôi là yêu em", max_sequence_len, vocab)
-sc2 = score_sentence("một trọng số các khuyết điểm của tôi là yêu em", max_sequence_len, vocab)
+sc1 = score_sentence("thư khi giám đốc", max_sequence_len, vocab)
+sc2 = score_sentence("thư ký giám đốc", max_sequence_len, vocab)
 
 
