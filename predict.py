@@ -9,8 +9,9 @@ import numpy as np
 from pickle import dump
 from pickle import load
 from keras.models import load_model
+import time
 # load the tokenizer
-tokenizer = load(open('test_sparse.pkl', 'rb'))
+tokenizer = load(open('test_sparse_v2.pkl', 'rb'))
 vacab = []
 def prepare_sentence(seq, maxlen):
     # Pads seq and slides windows
@@ -104,13 +105,13 @@ def score_sentence(sentence, maxlen, vocab):
         print('P(w={}|h={})={}'.format(word, history, prob_word))
     print('Prob. sentence: {}'.format(np.exp(log_p_sentence)))
 
-data = open('data.txt').read()
+data = open('data_5k.txt').read()
 
 max_sequence_len, total_words, vocab = get_vocab(data)
-model = load_model('test_sparse.h5')
+model = load_model('test_sparse_v2.h5')
 # print(generate_text("em của", 3, max_sequence_len))
 
-sc1 = score_sentence("thư khi giám đốc", max_sequence_len, vocab)
-sc2 = score_sentence("thư ký giám đốc", max_sequence_len, vocab)
+sc1 = score_sentence("thư khi giám đốc cho biết thêm giám đốc", max_sequence_len, vocab)
+sc2 = score_sentence("thư ký giám đốc cho biết thêm giám đốc", max_sequence_len, vocab)
 
 
