@@ -17,6 +17,7 @@ def conv_special_syll(str):
 
 def dataset_preparation(data):
     # basic cleanup
+    data = data.replace("# ", "#")
     corpus = data.lower().split("#")
 
     # tokenization
@@ -46,7 +47,7 @@ def create_model(predictors, label, max_sequence_len, total_words):
     model = Sequential()
     model.add(Embedding(total_words, 10, input_length=max_sequence_len - 1))
     model.add(LSTM(150, return_sequences=True))
-    # model.add(Dropout(0.2))
+    model.add(Dropout(0.2))
     model.add(LSTM(100))
     model.add(Dense(total_words, activation='softmax'))
 
@@ -55,9 +56,9 @@ def create_model(predictors, label, max_sequence_len, total_words):
     model.fit(predictors, label, epochs=15, batch_size=256, verbose=1, callbacks=[earlystop])
     print(model.summary())
     # save the model to file
-    model.save('test_sparse_v2.h5')
+    model.save('test_sparse_v3.h5')
     # save the tokenizer
-    dump(tokenizer, open('test_sparse_v2.pkl', 'wb'))
+    dump(tokenizer, open('test_sparse_v3.pkl', 'wb'))
     return model
 
 
@@ -76,7 +77,7 @@ def generate_text(seed_text, next_words, max_sequence_len):
     return seed_text
 
 
-data = open('data_5k.txt').read()
+data = open('data.txt').read()
 # data = conv_special_syll(data)
 
 predictors, label, max_sequence_len, total_words = dataset_preparation(data)
